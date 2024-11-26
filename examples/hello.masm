@@ -1,0 +1,54 @@
+JMP _start
+prompt DS "Please enter your name\n> "
+newline DS '\n'
+hello DS "Hello "
+
+M1 DS -1
+nil DS 0
+console = 1
+
+buffer DS 0
+
+_start:
+    LDC prompt
+    OUTS console
+_read:
+    LDC 1
+    ADD sv
+    STV sv
+tr: IN console
+    STV buffer
+    EQL nil
+    JMN tr
+    LDV buffer
+    EQL newline
+    JMN _hello
+    LDV buffer
+sv: STV inputSize
+    LDC 1
+    ADD inputSize
+    STV inputSize
+    JMP _read
+_hello:
+    LDC hello
+    OUTS console
+_answer:
+    LDV inputSize
+    ADD M1
+    JMN _end
+    STV inputSize
+    LDC 1
+    ADD ls
+    STV ls
+ls: LDV inputSize
+    OUT console
+    JMP _answer
+
+_end:
+    LDC '!'
+    OUT console
+    LDC '\n'
+    OUT console
+    HALT
+
+inputSize DS 0
